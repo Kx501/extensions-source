@@ -44,7 +44,7 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     private val json: Json by injectLazy()
     private val preferences: SharedPreferences = getPreferences()
     override val baseUrl: String
-        get() = "https://" + (preferences.getString(MIRROR_KEY) ?: "fuwt.cc")
+        get() = "https://" + preferences.getString(MIRROR_KEY, "fuwt.cc")
 
     private val rewriteOctetStream: Interceptor = Interceptor { chain ->
         val originalResponse: Response = chain.proceed(chain.request())
