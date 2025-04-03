@@ -44,7 +44,7 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     private val json: Json by injectLazy()
     private val preferences: SharedPreferences = getPreferences()
     override val baseUrl: String
-        get() = "https://" + (preferences.getString(MIRROR_KEY, "fuwt.cc") ?: "fuwt.cc")
+        get() = "https://" + (preferences.getString(MIRROR_KEY) ?: "fuwt.cc")
 
     private val rewriteOctetStream: Interceptor = Interceptor { chain ->
         val originalResponse: Response = chain.proceed(chain.request())
@@ -177,8 +177,8 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     override fun setupPreferenceScreen(screen: PreferenceScreen) {
         EditTextPreference(screen.context).apply {
             key = MIRROR_KEY
-            title = "镜像网址"
-            summary = "请输入镜像网址，防走丢链接：fuwt.cc"
+            title = "主站网址"
+            summary = "默认值：manwass.cc\n防走丢链接：fuwt.cc\n重启生效。"
             setDefaultValue("manwass.cc")
         }.let { screen.addPreference(it) }
 
@@ -187,6 +187,7 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
             title = "图源"
             entries = IMAGE_HOST_ENTRIES
             entryValues = IMAGE_HOST_ENTRY_VALUES
+            summary = "已选择：%s\n重启生效。"
             setDefaultValue(IMAGE_HOST_ENTRY_VALUES[0])
         }.let { screen.addPreference(it) }
 
