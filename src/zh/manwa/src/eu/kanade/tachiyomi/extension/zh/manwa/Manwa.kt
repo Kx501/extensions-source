@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.extension.zh.manwa
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.CheckBoxPreference
-import androidx.preference.ListPreference
+import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -42,7 +42,7 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     override val supportsLatest: Boolean = true
     private val json: Json by injectLazy()
     private val preferences: SharedPreferences = getPreferences()
-    override val baseUrl = "https://" + MIRROR_ENTRIES.run { this[preferences.getString(MIRROR_KEY, "0")!!.toInt().coerceAtMost(size)] }
+    override val baseUrl = "https://" + preferences.getString(MIRROR_KEY, "manwa.fun")
 
     private val rewriteOctetStream: Interceptor = Interceptor { chain ->
         val originalResponse: Response = chain.proceed(chain.request())
@@ -176,14 +176,15 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     override fun imageUrlParse(document: Document): String = throw UnsupportedOperationException()
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) {
-        ListPreference(screen.context).apply {
+        // EditTextPreference for manual mirror URL input
+        EditTextPreference(screen.context).apply {
             key = MIRROR_KEY
-            title = "使用镜像网址"
-            entries = MIRROR_ENTRIES
-            entryValues = Array(entries.size, Int::toString)
-            setDefaultValue("0")
+            title = "手动输入镜像网址"
+            summary = "请输入镜像网址"
+            setDefaultValue("fuwt.cc")
         }.let { screen.addPreference(it) }
 
+        // ListPreference for image host selection
         ListPreference(screen.context).apply {
             key = IMAGE_HOST_KEY
             title = "图源"
@@ -192,10 +193,10 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
             setDefaultValue(IMAGE_HOST_ENTRY_VALUES[0])
         }.let { screen.addPreference(it) }
 
+        // CheckBoxPreference for auto clear cookie
         CheckBoxPreference(screen.context).apply {
             key = AUTO_CLEAR_COOKIE_KEY
             title = "自动删除 Cookie"
-
             setDefaultValue(false)
         }.let { screen.addPreference(it) }
     }
@@ -214,7 +215,6 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
 
     companion object {
         private const val MIRROR_KEY = "MIRROR"
-        private val MIRROR_ENTRIES get() = arrayOf("manwa.fun", "manwa.me", "manwav3.xyz", "manwasa.cc", "manwadf.cc")
         private const val IMAGE_HOST_KEY = "IMG_HOST"
         private val IMAGE_HOST_ENTRIES = arrayOf("图源1", "图源2", "图源3")
         private val IMAGE_HOST_ENTRY_VALUES = arrayOf("1", "2", "3")
