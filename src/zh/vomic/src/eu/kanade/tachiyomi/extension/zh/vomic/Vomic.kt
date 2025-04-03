@@ -45,7 +45,7 @@ class Vomic : HttpSource(), ConfigurableSource {
             baseUrl = "https://www.$tld"
             apiUrl = "https://api.$tld"
         } else {
-            val url = "http://$domain"
+            val url = "https://$domain"
             baseUrl = url
             apiUrl = url
         }
@@ -169,7 +169,7 @@ class Vomic : HttpSource(), ConfigurableSource {
         EditTextPreference(screen.context).apply {
             key = DOMAIN_PREF
             title = "网址"
-            summary = "不带 http:// 前缀，重启生效\n备选网址：$DEFAULT_DOMAIN 或 119.23.243.52"
+            summary = "不带 https:// 前缀，重启生效\n备选网址：$DEFAULT_DOMAIN 或 119.23.243.52"
             setDefaultValue(DEFAULT_DOMAIN)
         }.let(screen::addPreference)
     }
