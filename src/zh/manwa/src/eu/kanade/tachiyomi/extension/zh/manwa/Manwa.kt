@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.extension.zh.manwa
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.CheckBoxPreference
+import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceScreen
-import androidx.preference.EditTextPreference
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.model.FilterList
@@ -109,7 +109,6 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     override fun latestUpdatesFromElement(element: Element) = throw UnsupportedOperationException()
 
     // Search
-
     override fun searchMangaRequest(page: Int, query: String, filters: FilterList): Request {
         val uri = Uri.parse(baseUrl).buildUpon()
         uri.appendPath("search")
@@ -126,7 +125,6 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     }
 
     // Details
-
     override fun mangaDetailsParse(document: Document): SManga = SManga.create().apply {
         title = document.selectFirst(".detail-main-info-title")!!.text()
         thumbnail_url = document.selectFirst("div.detail-main-cover > img")!!.attr("data-original")
@@ -137,7 +135,6 @@ class Manwa : ParsedHttpSource(), ConfigurableSource {
     }
 
     // Chapters
-
     override fun chapterListSelector(): String = "ul#detail-list-select > li > a"
     override fun chapterFromElement(element: Element): SChapter = SChapter.create().apply {
         url = element.attr("href")
