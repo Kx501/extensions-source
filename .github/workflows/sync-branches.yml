@@ -1,5 +1,0 @@
-            - name: AutoSync branches
-  # You may pin to the exact commit or the version.
-  # uses: danielthedifficult/Action-AutoSync-Branches@c4bf6ab2758ae371d37464bd171e54c5e35eba3f
-  uses: danielthedifficult/Action-AutoSync-Branches@v1.0.0
-          
