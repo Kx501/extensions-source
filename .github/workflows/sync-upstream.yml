@@ -1,8 +1,8 @@
 name: Sync Upstream
 on:
   schedule:
-    - cron: "0 0 */5 * *"
-  workflow_dispatch:      # 支持手动触发
+    - cron: "0 0 */5 * *"  # 每5天同步一次
+  workflow_dispatch:        # 允许手动触发
 
 jobs:
   sync:
@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取完整 Git 历史
+          fetch-depth: 0
 
       - name: Sync Fork
         uses: actions/github-script@v6
@@ -21,9 +21,9 @@ jobs:
               await github.rest.repos.mergeUpstream({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                branch: 'main',  # 同步的分支
+                branch: 'main'
               });
               console.log('Synced successfully!');
             } catch (error) {
-              console.error('Sync failed:', error);
+              core.setFailed('Sync failed: ' + error.message);
             }
