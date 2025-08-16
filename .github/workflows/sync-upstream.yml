@@ -29,3 +29,5 @@ jobs:
             } catch (error) {
               core.setFailed('Sync failed: ' + error.message);
             }
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
